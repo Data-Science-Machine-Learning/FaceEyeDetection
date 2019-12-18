@@ -3,8 +3,8 @@ import time
 import datetime
 
 # getting face and eye cascade classifier
-face_cascade = cv2.CascadeClassifier("cascade_lib/data/haarcascades/haarcascade_frontalface_default.xml")
-eye_cascade = cv2.CascadeClassifier("cascade_lib/data/haarcascades/haarcascade_eye.xml")
+face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+eye_cascade = cv2.CascadeClassifier("haarcascade_eye.xml")
 
 # initialise video read object
 cap = cv2.VideoCapture(0)
