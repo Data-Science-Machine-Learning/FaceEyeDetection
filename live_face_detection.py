@@ -28,6 +28,9 @@ eye_cascade = cv2.CascadeClassifier("haarcascade_eye.xml")
 
 # initialise video read object
 cap = cv2.VideoCapture(0)
+print(cap.get(cv2.CAP_PROP_FPS))
+cap.set(cv2.CAP_PROP_FPS, 10)
+print(cap.get(cv2.CAP_PROP_FPS))
 
 while (cap.isOpened()):
 	#time.sleep(1)
