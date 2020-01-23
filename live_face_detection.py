@@ -4,12 +4,12 @@ import datetime
 import mysql.connector
 import uuid
 import face_recognition
+import time
 import os
 
-# sample known images of sachin and kohli
-known_images = ['Ankit.jpg','Kushal.jpg']
+# sample known images of employee to recognise person
+known_images = ['Kushal.jpg','Ankit.jpg']
 
-# initial image encoding to compare with video frame
 cmp_picture = face_recognition.load_image_file("sachin.jpg")
 cmp_encoding = face_recognition.face_encodings(cmp_picture)[0]
 
@@ -30,6 +30,7 @@ eye_cascade = cv2.CascadeClassifier("haarcascade_eye.xml")
 cap = cv2.VideoCapture(0)
 
 while (cap.isOpened()):
+	#time.sleep(1)
 	ret, frame = cap.read() # reading frame from video source
 	gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert into gray scale image
 
@@ -41,8 +42,9 @@ while (cap.isOpened()):
 		roi_gray = gray_frame[y:y+h, x:x+w] # getting region of interest from gray frame, read by camera
 		roi_color = frame[y:y+h, x:x+w] # getting region of interest from color frame, read by camera
 		curr_time = str(datetime.datetime.now())
+		#cv2.imwrite('face_roi_'+curr_time+'.jpg', roi_color) # take snaps and save for detected faces
 
-		# getting eye bounding rectangle values
+		# geetting eye bounding rectangle values
 		eyes = eye_cascade.detectMultiScale(roi_gray)
 		for (ex,ey,ew,eh) in eyes:
 			#cv2.rectangle(roi_color, (ex,ey), (ex+ew,ey+eh), (0,0,255), 2)
@@ -66,18 +68,24 @@ while (cap.isOpened()):
 					cv2.imwrite(temp_img_name, roi_color)
 					detection_flag = 0
 
+					# recognising the face with help of previously stored images
 					for img in known_images:
+						print("inside checking person")
 						temp_img = face_recognition.load_image_file(img)
 						known_image_encoding = face_recognition.face_encodings(temp_img)[0]
 						results = face_recognition.compare_faces([known_image_encoding], frame_encoding)
 
 						if results[0] == True:
 							detection_flag = 1
-							face_identify = img.split('.')[0]
+							face_identify = img.split('.')[0] # getting name of image, the recognised person
 							detected_output = "It's a picture of "+face_identify
+							font = cv2.FONT_HERSHEY_SIMPLEX
+							cv2.putText(frame, face_identify, (10,100), font, 1, (0,255,255), 2, cv2.LINE_AA)
 						else:
 							unknown_face_identify = "Unknown"
 							not_detected_output = "It is unknown picture!"
+							#font = cv2.FONT_HERSHEY_SIMPLEX
+							#cv2.putText(frame, unknown_face_identify, (10,100), font, 1, (0,255,255), 2, cv2.LINE_AA)
 
 					if detection_flag == 1:
 						print(detected_output)
@@ -92,10 +100,10 @@ while (cap.isOpened()):
 						mycursor.execute(sql, val)
 						mydb.commit()
 
-					
 			else:
 				print("no face detected")
 
+			
 
 	cv2.imshow('FaceDetect',frame)
 	k = cv2.waitKey(10)
