@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 21, 2020 at 04:33 PM
+-- Generation Time: Jan 23, 2020 at 05:43 PM
 -- Server version: 5.7.28-0ubuntu0.16.04.2
 -- PHP Version: 5.6.40-15+ubuntu16.04.1+deb.sury.org+1
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `image` (
   `id` int(11) NOT NULL,
   `image_name` varchar(255) DEFAULT NULL,
+  `person_detected` varchar(255) DEFAULT NULL,
   `event_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -36,11 +37,11 @@ CREATE TABLE `image` (
 -- Dumping data for table `image`
 --
 
-INSERT INTO `image` (`id`, `image_name`, `event_time`) VALUES
-(1, 'test.jpg', '2020-01-21 00:00:00'),
-(2, '2bc824fe-c6b1-43ac-9050-d30df01ff154.jpg', '2020-01-21 16:28:45'),
-(3, 'f5599894-a3ee-497c-925e-c0d4f6ea4b8e.jpg', '2020-01-21 16:28:47'),
-(4, '58167124-6c9f-46ff-95cd-3b131793886d.jpg', '2020-01-21 16:28:47');
+INSERT INTO `image` (`id`, `image_name`, `person_detected`, `event_time`) VALUES
+(1, '3513b87a-2b8e-4449-964f-053e8551a388.jpg', 'Kushal', '2020-01-23 17:38:40'),
+(2, 'ae205454-02da-400a-bc81-d78967840299.jpg', 'Ankit', '2020-01-23 17:38:48'),
+(3, '7066fe02-278f-4b41-883c-fa49e994cbcb.jpg', 'Kushal', '2020-01-23 17:39:41'),
+(4, '3280c854-571f-4627-81e9-68b03b8c4cc4.jpg', 'Ankit', '2020-01-23 17:40:05');
 
 --
 -- Indexes for dumped tables
