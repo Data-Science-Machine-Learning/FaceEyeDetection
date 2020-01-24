@@ -8,12 +8,19 @@ import os
 
 face_identify = ""
 
+#fourcc = cv2.VideoWriter_fourcc(*'XVID')
+#video_file_name = str(uuid.uuid4())+".avi"
+#out = cv2.VideoWriter(video_file_name, fourcc, 20.0, (640,480))
+#os.system('chmod 777 '+video_file_name)
+
 # sample known images of employee to recognise person
 known_images = ['Kushal.jpg','Ankit.jpg']
 
+# initial encodings to compare
 cmp_picture = face_recognition.load_image_file("sachin.jpg")
 cmp_encoding = face_recognition.face_encodings(cmp_picture)[0]
 
+# mysql connection
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
@@ -30,17 +37,23 @@ eye_cascade = cv2.CascadeClassifier("haarcascade_eye.xml")
 # initialise video read object
 cap = cv2.VideoCapture(0)
 print(cap.get(cv2.CAP_PROP_FPS))
-cap.set(cv2.CAP_PROP_FPS, 10)
-print(cap.get(cv2.CAP_PROP_FPS))
+#cap.set(cv2.CAP_PROP_FPS, 10)
+#print(cap.get(cv2.CAP_PROP_FPS))
 
 while (cap.isOpened()):
-	#time.sleep(1)
+	time.sleep(1)
 	ret, frame = cap.read() # reading frame from video source
 	gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert into gray scale image
+	#out.write(frame)
 
 	# getting face bounding rectangle values
 	faces = face_cascade.detectMultiScale(gray_frame,scaleFactor=1.05,minNeighbors=3)
 	for (x,y,w,h) in faces:
+		# checking area of face bounding rect
+		area = w*h
+		print("Area: "+str(area))
+		if area <= 90000:
+			continue;
 		frame = cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0), 2)
 
 		roi_gray = gray_frame[y:y+h, x:x+w] # getting region of interest from gray frame, read by camera
@@ -48,12 +61,13 @@ while (cap.isOpened()):
 		curr_time = str(datetime.datetime.now())
 		#cv2.imwrite('face_roi_'+curr_time+'.jpg', roi_color) # take snaps and save for detected faces
 
-		# geetting eye bounding rectangle values
+		# getting eye bounding rectangle values
 		eyes = eye_cascade.detectMultiScale(roi_gray)
 		for (ex,ey,ew,eh) in eyes:
 			#cv2.rectangle(roi_color, (ex,ey), (ex+ew,ey+eh), (0,0,255), 2)
 			temp_img_name = str(uuid.uuid4())+".jpg"
 
+			# need to convert into RGB to process in face recognise
 			rgb_frame = cv2.cvtColor(roi_color, cv2.COLOR_BGR2RGB)
 			check_img_name = str(uuid.uuid4())+".jpg"
 			cv2.imwrite(check_img_name, rgb_frame)
@@ -61,6 +75,7 @@ while (cap.isOpened()):
 			frame_picture = face_recognition.load_image_file(check_img_name)
 			frame_encoding = face_recognition.face_encodings(frame_picture)
 			os.system('rm '+check_img_name)
+			# some face bounding detected
 			if len(frame_encoding) > 0:
 				frame_encoding = face_recognition.face_encodings(frame_picture)[0]
 				results = face_recognition.compare_faces([frame_encoding], cmp_encoding)
@@ -87,6 +102,7 @@ while (cap.isOpened()):
 							detected_output = "It's a picture of "+face_identify
 							font = cv2.FONT_HERSHEY_SIMPLEX
 							cv2.putText(frame, face_identify, (10,100), font, 1, (0,255,255), 2, cv2.LINE_AA)
+							#out.write(frame)
 						else:
 							unknown_face_identify = "Unknown"
 							not_detected_output = "It is unknown picture!"
@@ -120,4 +136,5 @@ while (cap.isOpened()):
 		break
 
 cap.release()
+#out.release()
 cv2.destroyAllWindows()
