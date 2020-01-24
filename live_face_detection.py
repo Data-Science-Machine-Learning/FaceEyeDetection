@@ -41,7 +41,7 @@ print(cap.get(cv2.CAP_PROP_FPS))
 #print(cap.get(cv2.CAP_PROP_FPS))
 
 while (cap.isOpened()):
-	time.sleep(1)
+	#time.sleep(1)
 	ret, frame = cap.read() # reading frame from video source
 	gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert into gray scale image
 	#out.write(frame)
