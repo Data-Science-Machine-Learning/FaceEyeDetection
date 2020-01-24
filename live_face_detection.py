@@ -4,8 +4,9 @@ import datetime
 import mysql.connector
 import uuid
 import face_recognition
-import time
 import os
+
+face_identify = ""
 
 # sample known images of employee to recognise person
 known_images = ['Kushal.jpg','Ankit.jpg']
@@ -66,6 +67,8 @@ while (cap.isOpened()):
 				cmp_encoding = frame_encoding
 				if results[0] == True:
 					print("same face detected")
+					font = cv2.FONT_HERSHEY_SIMPLEX
+					cv2.putText(frame, face_identify, (10,100), font, 1, (0,255,255), 2, cv2.LINE_AA)
 				else:
 					print("new face detected")
 					cv2.imwrite(temp_img_name, roi_color)
@@ -105,6 +108,9 @@ while (cap.isOpened()):
 
 			else:
 				print("no face detected")
+				font = cv2.FONT_HERSHEY_SIMPLEX
+				no_face = "No Face Detected"
+				cv2.putText(frame, no_face, (10,100), font, 1, (0,255,255), 2, cv2.LINE_AA)
 
 			
 
