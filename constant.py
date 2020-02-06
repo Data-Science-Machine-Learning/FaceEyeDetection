@@ -1,0 +1,9 @@
+HOST = "localhost"
+DBUSER = "root"
+DBPASSWORD = "asterisk"
+DATABASE = "raspbery_pi"
+SENDGRID = "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"
+INITIALIMAGE = "sachin.jpg"
+FACECASCADE = "haarcascade_frontalface_default.xml"
+EYESCASCADE = "haarcascade_eye.xml"
+FACEDETECTIONAREA = 25000
