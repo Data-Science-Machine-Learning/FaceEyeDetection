@@ -5,10 +5,20 @@ Required packages installation:
 
 pip3 install opencv-python
 
-pip3 install mysql-connector
+pip3 install MySQL-connector-python
+
+pip3 install cmake
+
+pip3 install dlib
 
 pip3 install face-recognition
 
 pip3 install sendgrid
 
 pip3 install pyttsx3
+
+pip3 install PyAudio
+
+apt install espeak
+
+apt install jackd2
